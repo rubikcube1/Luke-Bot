@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Luke-Bot - Advanced AI Chatbot</title>
+    <title>Luke-Bot</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.58.1/build/stlite.css" />
     <style>
       body { margin: 0; background-color: #0e1117; }
@@ -26,17 +26,14 @@ import time
 import xml.etree.ElementTree as ET
 import pandas as pd
 
-# Default API Keys (May be expired)
 DEFAULT_GROQ_KEY = "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"
 DEFAULT_GEMINI_KEY = "AIzaSyAzLMt-JM1smoMD7kA1CC4GO3-rPCgHb8s"
 WOLFRAM_APPID = "LVT9LY-LYTPPU"
 NCBI_API_KEY = "6b3d9fed81852b6da5596971edcecddd4909"
-
 APP_NAME = "Luke-Bot"
 
 st.set_page_config(page_title=APP_NAME, layout="wide")
 
-# UI Styling
 st.markdown("""
 <style>
     .stProgress > div > div > div > div {
@@ -48,21 +45,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Session State Initialization
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "token_usage" not in st.session_state:
     st.session_state.token_usage = 100 
 
-# Sidebar Configuration
-st.sidebar.title(f"{APP_NAME} Console")
-
-# Debug: Manual API Key Override
-st.sidebar.subheader("APIデバッグ設定")
-custom_gemini_key = st.sidebar.text_input("Gemini API Key (上書き用)", type="password")
+st.sidebar.title(APP_NAME)
+custom_gemini_key = st.sidebar.text_input("Gemini API Key", type="password")
 gemini_key = custom_gemini_key if custom_gemini_key else DEFAULT_GEMINI_KEY
 
-# 1. Broad Categories
 category_main = st.sidebar.selectbox("大カテゴリー", [
     "理学 (Science)",
     "工学・技術 (Engineering & Tech)",
@@ -71,7 +62,6 @@ category_main = st.sidebar.selectbox("大カテゴリー", [
     "クリエイティブ & 実用"
 ])
 
-# 2. Middle and Detailed Categories Logic
 if category_main == "理学 (Science)":
     category_mid = st.sidebar.selectbox("中カテゴリー", ["物理学", "宇宙・天文学", "生命科学", "化学", "地球科学"])
     if category_mid == "物理学":
@@ -99,7 +89,7 @@ elif category_main == "数学・統計学 (Mathematics)":
     elif category_mid == "応用数学":
         detail_item = st.sidebar.selectbox("詳細項目", ["微分方程式", "数値解析", "離散数学"])
     elif category_mid == "数学上の未解決問題":
-        detail_item = st.sidebar.selectbox("詳細項目", ["素数の分布", "双子素数の予想", "リーマン予想 (ミレニアム懸賞問題)", "P対NP問題", "ナビエ-ストークス方程式の解の存在"])
+        detail_item = st.sidebar.selectbox("詳細項目", ["素数の分布", "双子素数の予想", "リーマン予想", "P対NP問題", "ナビエ-ストークス方程式"])
     else:
         detail_item = st.sidebar.selectbox("詳細項目", ["確率論", "多変量解析", "ベイズ統計"])
 
@@ -112,7 +102,7 @@ elif category_main == "人文・社会科学 (Liberal Arts)":
     else:
         detail_item = st.sidebar.selectbox("詳細項目", ["臨床心理学", "国際関係論", "行動経済学"])
 
-else: # クリエイティブ & 実用
+else:
     category_mid = st.sidebar.selectbox("中カテゴリー", ["プログラミング・Web", "教育・学習", "キャリア・生活"])
     if category_mid == "プログラミング・Web":
         detail_item = st.sidebar.selectbox("詳細項目", ["Python", "Rust / C++", "Frontend (React)", "SQL"])
@@ -121,41 +111,18 @@ else: # クリエイティブ & 実用
     else:
         detail_item = st.sidebar.selectbox("詳細項目", ["生活の知恵", "キャリア設計", "健康管理"])
 
-st.sidebar.markdown("---")
-
-# 3. Mode Selection
 mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
+token_slider = st.sidebar.slider("会話の長さ", 1, 5, 3)
+expertise_slider = st.sidebar.slider("専門性", 1, 5, 3)
 
-# 4. Parameters
-st.sidebar.subheader("生成パラメータ")
-token_slider = st.sidebar.slider("会話の長さ（消費トークン）", 1, 5, 3)
-expertise_slider = st.sidebar.slider("会話の専門性", 1, 5, 3)
-
-# 5. API Visualizer Logic
-st.sidebar.subheader("API呼び出し予定")
-logic_api = "Gemini-1.5-Flash"
-if mode == "専門家対話" or mode == "コーダーモード":
-    logic_api = "Llama-3.3-70b (Groq)"
-st.sidebar.text(f"メインAPI: {logic_api}")
-
-if "ArXiv" in detail_item or "宇宙" in category_mid or "物理" in category_mid or "未解決問題" in category_mid:
-    st.sidebar.text("補助API: ArXiv API")
-elif "NCBI" in detail_item or "生命科学" in category_mid:
-    st.sidebar.text("補助API: NCBI API")
-elif "Wolfram" in detail_item or "数学" in category_main:
-    st.sidebar.text("補助API: Wolfram Alpha")
-
-st.sidebar.subheader("API残量リソース")
 st.sidebar.progress(st.session_state.token_usage)
-st.sidebar.caption(f"推定残り呼び出し可能容量: {st.session_state.token_usage}%")
+st.sidebar.caption(f"残り容量: {st.session_state.token_usage}%")
 
-# Helper Functions
 def call_groq(prompt, system_prompt=""):
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {DEFAULT_GROQ_KEY}", "Content-Type": "application/json"}
     temp = 0.1 + (expertise_slider * 0.15)
     max_tokens = token_slider * 600
-    
     payload = {
         "model": "llama-3.3-70b-versatile",
         "messages": [
@@ -168,23 +135,23 @@ def call_groq(prompt, system_prompt=""):
     try:
         resp = requests.post(url, json=payload, headers=headers)
         if resp.status_code != 200:
-            return f"エラー: Groq APIがステータスコード {resp.status_code} を返しました。"
+            return f"Error: {resp.status_code}"
         return resp.json()['choices'][0]['message']['content']
     except Exception as e:
-        return f"エラー: Groq APIの呼び出し中に例外が発生しました: {str(e)}"
+        return str(e)
 
 def call_gemini(prompt, system_prompt=""):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
-    full_prompt = f"{system_prompt}\\n\\nユーザーの質問: {prompt}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={gemini_key}"
+    full_prompt = f"{system_prompt}\\n\\nUser: {prompt}"
     payload = {"contents": [{"parts": [{"text": full_prompt}]}]}
     try:
         resp = requests.post(url, json=payload)
         if resp.status_code != 200:
-            error_detail = resp.json().get('error', {}).get('message', '不明なエラー')
-            return f"エラー: Gemini APIがステータスコード {resp.status_code} を返しました。内容: {error_detail}"
+            error_msg = resp.json().get("error", {}).get("message", str(resp.status_code))
+            return f"Error: {error_msg}"
         return resp.json()['candidates'][0]['content']['parts'][0]['text']
     except Exception as e:
-        return f"エラー: Gemini APIの呼び出し中に例外が発生しました: {str(e)}"
+        return str(e)
 
 def search_arxiv(query):
     base_url = "http://export.arxiv.org/api/query?"
@@ -197,67 +164,54 @@ def search_arxiv(query):
             title = entry.find('{http://www.w3.org/2005/Atom}title').text
             summary = entry.find('{http://www.w3.org/2005/Atom}summary').text
             link = entry.find('{http://www.w3.org/2005/Atom}id').text
-            results.append(f"タイトル: {title}\\n要約: {summary[:200]}...\\nURL: {link}")
-        return "\\n\\n".join(results) if results else "論文は見つかりませんでした。"
+            results.append(f"Title: {title}\\nSummary: {summary[:200]}...\\nURL: {link}")
+        return "\\n\\n".join(results) if results else "Not found"
     except:
-        return "ArXiv API検索エラー。"
+        return "API Error"
 
 def call_wolfram(query):
     url = f"http://api.wolframalpha.com/v1/result?appid={WOLFRAM_APPID}&i={query}"
     try:
         resp = requests.get(url)
-        return f"Wolfram Alphaの解析結果: {resp.text}" if resp.status_code == 200 else "計算結果を取得できませんでした。"
+        return resp.text if resp.status_code == 200 else "No result"
     except:
-        return "Wolfram API接続エラー。"
+        return "API Error"
 
-# Main UI
 st.title(APP_NAME)
-st.text(f"現在の設定: {category_main} > {category_mid} > {detail_item} | モード: {mode}")
+st.text(f"{category_main} > {category_mid} > {detail_item} | {mode}")
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("メッセージを入力してください"):
+if prompt := st.chat_input("Input message"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    with st.spinner("処理中..."):
+    with st.spinner("Processing"):
         response = ""
-        # Mode Logic
         if mode == "コーダーモード":
-            response = call_groq(prompt, "あなたはプログラミングの専門家です。正確なコードと詳細な解説を提供してください。")
-            
+            response = call_groq(prompt, "Programming expert")
         elif mode == "論文検索・要約":
             if "NCBI" in detail_item or "生命科学" in category_mid:
-                response = f"NCBIデータベース(PubMed)より最新の医学・生物学情報を検索しました。\\n[クエリ: {prompt}]\\n学術的な背景を含めた要約を提供します。"
+                response = f"NCBI search results for: {prompt}"
             else:
-                response = f"ArXiv学術データベースより関連論文を検索しました:\\n\\n" + search_arxiv(prompt)
-                
+                response = search_arxiv(prompt)
         elif mode == "専門家対話":
             if "Wolfram" in detail_item or "数学" in category_main:
                 wa_res = call_wolfram(prompt)
-                response = call_groq(f"Wolfram Alphaの結果: {wa_res} を踏まえ、厳密な数学的証明や学術的背景を含めた解説を行ってください。 問い: {prompt}")
-            elif "未解決問題" in category_mid:
-                arxiv_res = search_arxiv(prompt)
-                response = call_groq(f"ArXivの最新論文情報: {arxiv_res} \\n 問い: {prompt} \\n 専門家として、この未解決問題の現状、困難さ、研究成果について論理的に解説してください。")
+                response = call_groq(f"Wolfram: {wa_res} Query: {prompt}")
             else:
-                response = call_groq(prompt, f"あなたは{detail_item}の専門家です。学術的な知見を用いて回答してください。")
-                
-        else: # 一般会話
-            sys_msg = "あなたはLuke-Botです。丁寧で健康的な対話を提供してください。"
-            if "勉強" in detail_item:
-                sys_msg += f"{detail_item}について、中学生以下のユーザーにも分かりやすく解説してください。不適切な表現は避けてください。"
+                response = call_groq(prompt, f"Expert in {detail_item}")
+        else:
+            sys_msg = "Luke-Bot Assistant"
             response = call_gemini(prompt, sys_msg)
-
-        # Update token usage visualization
-        st.session_state.token_usage = max(0, st.session_state.token_usage - (token_slider * 1))
+        st.session_state.token_usage = max(0, st.session_state.token_usage - 2)
 
     with st.chat_message("assistant"):
         st.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
-
 `
         },
       });
