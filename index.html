@@ -238,13 +238,16 @@ def call_groq(prompt, system_prompt=""):
         return str(e)
 
 def call_gemini(prompt, system_prompt=""):
+    if not GEMINI_API_KEY:
+        return "GEMINI_API_KEYが設定されていません。"
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
+    # stlite(JavaScript)のテンプレートリテラル内では \n は \\n と書く必要があります
     payload = {
         "contents": [
             {
                 "parts": [
-                    {"text": f"System: {system_prompt}\n\nUser: {prompt}"}
+                    {"text": f"System: {system_prompt}\\n\\nUser: {prompt}"}
                 ]
             }
         ],
