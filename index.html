@@ -61,55 +61,53 @@ category_main = st.sidebar.selectbox("大カテゴリー", [
     "プログラミング"
 ])
 
+# 変数名を detail_item に統一
+detail_item = "未設定"
+
 if category_main == "数学":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
-    "代数学",
-    "幾何学",
-    "解析学",
-    "数理論理学・基礎論",
-    "確率・統計学",
-    "ミレニアム懸賞問題・未解決問題"
+        "代数学",
+        "幾何学",
+        "解析学",
+        "数理論理学・基礎論",
+        "確率・統計学",
+        "ミレニアム懸賞問題・未解決問題"
     ])
     
     if category_mid == "代数学":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "群・環・体",
             "線形代数学",
             "数論",
             "代数幾何学",
             "表現論"
         ])
-    
-    elif category_mid  == "幾何学":
-        datail_item = st.sidebar.selectbox("詳細項目",[
+    elif category_mid == "幾何学":
+        detail_item = st.sidebar.selectbox("詳細項目",[
             "微分幾何学",
             "位相幾何学",
             "シンプレクティック幾何学",
             "フラクタル幾何学"
         ])
-
-    elif category_mid  == "解析学":
-        datail_item = st.sidebar.selectbox("詳細項目",[
+    elif category_mid == "解析学":
+        detail_item = st.sidebar.selectbox("詳細項目",[
             "実・複素解析",
             "微分方程式",
             "関数解析学",
             "変分法"
         ])
-
-    elif category_mid  == "数理論理学・基礎学":
-        datail_item = st.sidebar.selectbox("詳細項目",[
+    elif category_mid == "数理論理学・基礎論":
+        detail_item = st.sidebar.selectbox("詳細項目",[
             "集合論",
             "圏論"
         ])
-
-    elif category_mid  == "確率・統計学":
-        datail_item = st.sidebar.selectbox("詳細項目",[
+    elif category_mid == "確率・統計学":
+        detail_item = st.sidebar.selectbox("詳細項目",[
             "確率過程",
             "数理統計学"
         ])
-
-    elif category_mid  == "ミレニアム懸賞問題・未解決問題":
-        datail_item = st.sidebar.selectbox("詳細項目",[
+    elif category_mid == "ミレニアム懸賞問題・未解決問題":
+        detail_item = st.sidebar.selectbox("詳細項目",[
             "ヤン–ミルズ方程式と質量ギャップ問題",
             "リーマン予想",
             "P≠NP予想",
@@ -120,8 +118,8 @@ if category_main == "数学":
             "コラッツ予想",
             "ゴールドバッハ予想",
             "双子素数予想",
-            "接吻数問題",
-    ])
+            "接吻数問題"
+        ])
 
 elif category_main == "物理":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -133,27 +131,24 @@ elif category_main == "物理":
     ])
     
     if category_mid == "古典力学":
-        datail_item = st.sidebar.selectbox("詳細項目", [
-        "ニュートン力学",
-        "解析力学", 
-        "流体力学"
-    ])
-
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "ニュートン力学",
+            "解析力学", 
+            "流体力学"
+        ])
     elif category_mid == "相対性理論":
-        datail_item = st.sidebar.selectbox("詳細項目", [
-        "特殊相対論",
-        "一般相対論"
-    ])
-
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "特殊相対論",
+            "一般相対論"
+        ])
     elif category_mid == "量子力学":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "波動力学", 
             "量子統計力学", 
             "場の量子論"
-    ])
-
+        ])
     else:
-        datail_item = "基本法則"
+        detail_item = "基本法則"
 
 elif category_main == "天文学":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -164,21 +159,20 @@ elif category_main == "天文学":
         "観測天文学"
     ])
 
-    if category_mid == "宇宙論 (Cosmology)":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+    if category_mid == "宇宙論":
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "ビッグバン理論", 
             "インフレーション理論", 
             "ダークマター・ダークエネルギー"
         ])
-
     elif category_mid == "観測天文学":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "電波天文学", 
             "X線・ガンマ線天文学", 
             "重力波天文学"
         ])
     else:
-        datail_item = "宇宙の観測"
+        detail_item = "宇宙の観測"
 
 elif category_main == "工学・技術":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -189,7 +183,7 @@ elif category_main == "工学・技術":
         "材料工学", 
         "航空宇宙工学"
     ])
-    datail_item = "技術の実装"
+    detail_item = "技術の実装"
 
 elif category_main == "プログラミング":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -201,20 +195,19 @@ elif category_main == "プログラミング":
     ])
     
     if category_mid == "理論計算機科学":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "アルゴリズムとデータ構造", 
             "計算複雑性理論", 
-            "型理論"])
-
+            "型理論"
+        ])
     elif category_mid == "データサイエンス・AI":
-        datail_item = st.sidebar.selectbox("詳細項目", [
+        detail_item = st.sidebar.selectbox("詳細項目", [
             "機械学習", 
-            "自然論理処理", 
+            "自然言語処理", 
             "コンピュータビジョン"
         ])
-
     else:
-        datail_item = "情報制御の技術"
+        detail_item = "情報制御の技術"
 
 mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
 token_slider = st.sidebar.slider("会話の長さ", 1, 5, 3)
@@ -247,37 +240,30 @@ def call_groq(prompt, system_prompt=""):
 
 def call_gemini(prompt, system_prompt=""):
     if not GEMINI_API_KEY:
-        return "コード内の GEMINI_API_KEY が設定されていません。"
+        return "GEMINI_API_KEY が設定されていません。"
     
+    # 安定版 v1 を使用
     model_path = "models/gemini-1.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1/{model_path}:generateContent?key={GEMINI_API_KEY}"
     
-    full_prompt = f"{system_prompt}\n\nUser: {prompt}"
+    full_prompt = f"{system_prompt}\\n\\nUser: {prompt}"
     payload = {
-        "contents": [
-            {
-                "parts": [{"text": full_prompt}]
-            }
-        ]
+        "contents": [{"parts": [{"text": full_prompt}]}]
     }
-    
     headers = {"Content-Type": "application/json"}
     
     try:
         resp = requests.post(url, json=payload, headers=headers)
-        
         if resp.status_code != 200:
             try:
-                error_data = resp.json()
-                error_msg = error_data.get("error", {}).get("message", "Unknown error")
+                error_msg = resp.json().get("error", {}).get("message", str(resp.status_code))
             except:
                 error_msg = resp.text
-            return f"Error {resp.status_code}: {error_msg}"
-            
+            return f"Error: {error_msg}"
         return resp.json()['candidates'][0]['content']['parts'][0]['text']
-        
     except Exception as e:
-        return f"通信エラーが発生しました: {str(e)}"
+        return f"Request failed: {str(e)}"
+
 def search_arxiv(query):
     base_url = "http://export.arxiv.org/api/query?"
     params = f"search_query=all:{query}&start=0&max_results=3"
@@ -296,7 +282,7 @@ def search_arxiv(query):
 
 def call_wolfram(query):
     if not WOLFRAM_APPID:
-        return "コード内の WOLFRAM_APPID が設定されていません。"
+        return "WOLFRAM_APPID が設定されていません。"
     url = f"http://api.wolframalpha.com/v1/result?appid={WOLFRAM_APPID}&i={query}"
     try:
         resp = requests.get(url)
@@ -305,38 +291,36 @@ def call_wolfram(query):
         return "API Error"
 
 st.title(APP_NAME)
-st.text(f"{category_main} > {category_mid} > {datail_item} | {mode}")
+st.text(f"{category_main} > {category_mid} > {detail_item} | {mode}")
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("Input message"):
+if prompt := st.chat_input("メッセージを入力"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    with st.spinner("Processing"):
+    with st.spinner("思考中..."):
         response = ""
         if mode == "コーダーモード":
             response = call_groq(prompt, "Programming expert")
         elif mode == "論文検索・要約":
-            if "NCBI" in datail_item or "生命科学" in category_mid:
-                response = f"NCBI search results for: {prompt}"
-            else:
-                response = search_arxiv(prompt)
+            response = search_arxiv(prompt)
         elif mode == "専門家対話":
-            if "Wolfram" in datail_item or "数学" in category_main:
+            if "数学" in category_main:
                 wa_res = call_wolfram(prompt)
                 if "設定されていません" in wa_res:
                     response = wa_res
                 else:
-                    response = call_groq(f"Wolfram: {wa_res} Query: {prompt}")
+                    response = call_groq(f"Wolfram: {wa_res} Query: {prompt}", f"Expert in {detail_item}")
             else:
-                response = call_groq(prompt, f"Expert in {datail_item}")
+                response = call_groq(prompt, f"Expert in {detail_item}")
         else:
             sys_msg = "Luke-Bot Assistant"
             response = call_gemini(prompt, sys_msg)
+        
         st.session_state.token_usage = max(0, st.session_state.token_usage - 2)
 
     with st.chat_message("assistant"):
