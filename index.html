@@ -241,8 +241,8 @@ def call_gemini(prompt, system_prompt=""):
     if not GEMINI_API_KEY:
         return "GEMINI_API_KEYが設定されていません。"
     
-    # モデル名を最新の安定版識別子に変更し、URL形式を修正
-    model_name = "gemini-1.5-flash-latest"
+    # モデル名を指定（404エラーを防ぐため安定版の識別子を使用）
+    model_name = "gemini-1.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_API_KEY}"
     
     # stlite(JavaScript)のテンプレートリテラル内では \n は \\n と書く必要があります
@@ -267,7 +267,9 @@ def call_gemini(prompt, system_prompt=""):
             resp = requests.post(url, json=payload, headers=headers, timeout=30)
             if resp.status_code == 200:
                 res_json = resp.json()
-                return res_json['candidates'][0]['content']['parts'][0]['text']
+                if 'candidates' in res_json and res_json['candidates']:
+                    return res_json['candidates'][0]['content']['parts'][0]['text']
+                return "Geminiから空のレスポンスが返されました。"
             elif resp.status_code == 429:  # Rate Limit
                 time.sleep(delay)
                 continue
