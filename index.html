@@ -57,7 +57,7 @@ category_main = st.sidebar.selectbox("大カテゴリー", [
     "数学",
     "物理",
     "天文学",
-    "工学・技術”,
+    "工学・技術",
     "プログラミング"
 ])
 
@@ -115,7 +115,7 @@ if category_main == "数学":
             "P≠NP予想",
             "ナビエ–ストークス方程式の解の存在と滑らかさ",
             "ホッジ予想",
-            "BSD予想"
+            "BSD予想",
             "素数ギャップ",
             "コラッツ予想",
             "ゴールドバッハ予想",
@@ -133,27 +133,27 @@ elif category_main == "物理":
     ])
     
     if category_mid == "古典力学":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
         "ニュートン力学",
         "解析力学", 
         "流体力学"
     ])
 
     elif category_mid == "相対性理論":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
         "特殊相対論",
         "一般相対論"
     ])
 
     elif category_mid == "量子力学":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
             "波動力学", 
             "量子統計力学", 
             "場の量子論"
     ])
 
     else:
-        detail_item = "基本法則"
+        datail_item = "基本法則"
 
 elif category_main == "天文学":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -165,20 +165,20 @@ elif category_main == "天文学":
     ])
 
     if category_mid == "宇宙論 (Cosmology)":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
             "ビッグバン理論", 
             "インフレーション理論", 
             "ダークマター・ダークエネルギー"
         ])
 
     elif category_mid == "観測天文学":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
             "電波天文学", 
             "X線・ガンマ線天文学", 
             "重力波天文学"
         ])
     else:
-        detail_item = "宇宙の観測"
+        datail_item = "宇宙の観測"
 
 elif category_main == "工学・技術":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -189,7 +189,7 @@ elif category_main == "工学・技術":
         "材料工学", 
         "航空宇宙工学"
     ])
-    detail_item = "技術の実装"
+    datail_item = "技術の実装"
 
 elif category_main == "プログラミング":
     category_mid = st.sidebar.selectbox("中カテゴリー", [
@@ -201,20 +201,20 @@ elif category_main == "プログラミング":
     ])
     
     if category_mid == "理論計算機科学":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
             "アルゴリズムとデータ構造", 
             "計算複雑性理論", 
             "型理論"])
 
     elif category_mid == "データサイエンス・AI":
-        detail_item = st.sidebar.selectbox("詳細項目", [
+        datail_item = st.sidebar.selectbox("詳細項目", [
             "機械学習", 
             "自然論理処理", 
             "コンピュータビジョン"
         ])
 
     else:
-        detail_item = "情報制御の技術"
+        datail_item = "情報制御の技術"
 
 mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
 token_slider = st.sidebar.slider("会話の長さ", 1, 5, 3)
@@ -288,7 +288,7 @@ def call_wolfram(query):
         return "API Error"
 
 st.title(APP_NAME)
-st.text(f"{category_main} > {category_mid} > {detail_item} | {mode}")
+st.text(f"{category_main} > {category_mid} > {datail_item} | {mode}")
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -304,19 +304,19 @@ if prompt := st.chat_input("Input message"):
         if mode == "コーダーモード":
             response = call_groq(prompt, "Programming expert")
         elif mode == "論文検索・要約":
-            if "NCBI" in detail_item or "生命科学" in category_mid:
+            if "NCBI" in datail_item or "生命科学" in category_mid:
                 response = f"NCBI search results for: {prompt}"
             else:
                 response = search_arxiv(prompt)
         elif mode == "専門家対話":
-            if "Wolfram" in detail_item or "数学" in category_main:
+            if "Wolfram" in datail_item or "数学" in category_main:
                 wa_res = call_wolfram(prompt)
                 if "設定されていません" in wa_res:
                     response = wa_res
                 else:
                     response = call_groq(f"Wolfram: {wa_res} Query: {prompt}")
             else:
-                response = call_groq(prompt, f"Expert in {detail_item}")
+                response = call_groq(prompt, f"Expert in {datail_item}")
         else:
             sys_msg = "Luke-Bot Assistant"
             response = call_gemini(prompt, sys_msg)
