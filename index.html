@@ -240,8 +240,9 @@ def call_groq(prompt, system_prompt=""):
 def call_gemini(prompt, system_prompt=""):
     model_id = "gemini-1.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1/models/{model_id}:generateContent?key={GEMINI_API_KEY}"
-    
-    combined_text = f"System: {system_prompt}\n\nUser: {prompt}"
+    combined_text = f"""System: {system_prompt}
+
+User: {prompt}"""
     
     payload = {
         "contents": [
