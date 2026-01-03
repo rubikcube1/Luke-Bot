@@ -61,7 +61,6 @@ category_main = st.sidebar.selectbox("大カテゴリー", [
     "プログラミング"
 ])
 
-# 変数名を detail_item に統一
 detail_item = "未設定"
 
 if category_main == "数学":
@@ -239,14 +238,9 @@ def call_groq(prompt, system_prompt=""):
         return str(e)
 
 def call_gemini(prompt, system_prompt=""):
-    if not GEMINI_API_KEY:
-        return "GEMINI_API_KEY が設定されていません。"
     
-    # 安定版 v1 を使用
-    model_path = "models/gemini-1.5-flash"
-    url = f"https://generativelanguage.googleapis.com/v1/{model_path}:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
-    # JavaScriptのテンプレートリテラル内では \\n と記述してPythonに \n を渡す必要がある
     full_prompt = f"{system_prompt}\\n\\nUser: {prompt}"
     payload = {
         "contents": [{"parts": [{"text": full_prompt}]}]
@@ -257,7 +251,8 @@ def call_gemini(prompt, system_prompt=""):
         resp = requests.post(url, json=payload, headers=headers)
         if resp.status_code != 200:
             try:
-                error_msg = resp.json().get("error", {}).get("message", str(resp.status_code))
+                error_data = resp.json()
+                error_msg = error_data.get("error", {}).get("message", str(resp.status_code))
             except:
                 error_msg = resp.text
             return f"Error: {error_msg}"
@@ -282,8 +277,6 @@ def search_arxiv(query):
         return "API Error"
 
 def call_wolfram(query):
-    if not WOLFRAM_APPID:
-        return "WOLFRAM_APPID が設定されていません。"
     url = f"http://api.wolframalpha.com/v1/result?appid={WOLFRAM_APPID}&i={query}"
     try:
         resp = requests.get(url)
