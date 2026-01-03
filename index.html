@@ -54,61 +54,167 @@ if "token_usage" not in st.session_state:
 st.sidebar.title(APP_NAME)
 
 category_main = st.sidebar.selectbox("大カテゴリー", [
-    "理学 (Science)",
-    "工学・技術 (Engineering & Tech)",
-    "数学・統計学 (Mathematics)",
-    "人文・社会科学 (Liberal Arts)",
-    "クリエイティブ & 実用"
+    "数学",
+    "物理",
+    "天文学",
+    "工学・技術”,
+    "プログラミング"
 ])
 
-if category_main == "理学 (Science)":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["物理学", "宇宙・天文学", "生命科学", "化学", "地球科学"])
-    if category_mid == "物理学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["量子力学", "相対性理論", "素粒子物理学", "物性物理"])
-    elif category_mid == "宇宙・天文学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["恒星物理", "宇宙論 (ArXiv)", "惑星科学"])
-    elif category_mid == "生命科学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["分子生物学 (NCBI)", "遺伝工学", "神経科学"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["有機化学", "無機化学", "気象学"])
+if category_main == "数学":
+    category_mid = st.sidebar.selectbox("中カテゴリー", [
+    "代数学",
+    "幾何学",
+    "解析学",
+    "数理論理学・基礎論",
+    "確率・統計学",
+    "ミレニアム懸賞問題・未解決問題"
+    ])
+    
+    if category_mid == "代数学":
+        datail_item = st.sidebar.selectbox("詳細項目", [
+            "群・環・体",
+            "線形代数学",
+            "数論",
+            "代数幾何学",
+            "表現論"
+        ])
+    
+    elif category_mid  == "幾何学":
+        datail_item = st.sidebar.selectbox("詳細項目",[
+            "微分幾何学",
+            "位相幾何学",
+            "シンプレクティック幾何学",
+            "フラクタル幾何学"
+        ])
 
-elif category_main == "工学・技術 (Engineering & Tech)":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["コンピュータ工学", "ロボティクス", "材料工学", "エネルギー工学"])
-    if category_mid == "コンピュータ工学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["OS・カーネル", "分散システム", "ハードウェア設計"])
-    elif category_mid == "ロボティクス":
-        detail_item = st.sidebar.selectbox("詳細項目", ["制御理論", "自律走行", "センサー工学"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["ナノマテリアル", "半導体技術", "再生可能エネルギー"])
+    elif category_mid  == "解析学":
+        datail_item = st.sidebar.selectbox("詳細項目",[
+            "実・複素解析",
+            "微分方程式",
+            "関数解析学",
+            "変分法"
+        ])
 
-elif category_main == "数学・統計学 (Mathematics)":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["純粋数学", "応用数学", "統計・データサイエンス", "数学上の未解決問題"])
-    if category_mid == "純粋数学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["数論 (Wolfram)", "代数幾何", "位相幾何学"])
-    elif category_mid == "応用数学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["微分方程式", "数値解析", "離散数学"])
-    elif category_mid == "数学上の未解決問題":
-        detail_item = st.sidebar.selectbox("詳細項目", ["素数の分布", "双子素数の予想", "リーマン予想", "P対NP問題", "ナビエ-ストークス方程式"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["確率論", "多変量解析", "ベイズ統計"])
+    elif category_mid  == "数理論理学・基礎学":
+        datail_item = st.sidebar.selectbox("詳細項目",[
+            "集合論",
+            "圏論"
+        ])
 
-elif category_main == "人文・社会科学 (Liberal Arts)":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["歴史学", "哲学・倫理学", "心理学", "法学・政治学", "経済学"])
-    if category_mid == "歴史学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["日本古代史", "西洋近代史", "東洋思想史"])
-    elif category_mid == "哲学・倫理学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["認識論", "形而上学", "応用倫理学"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["臨床心理学", "国際関係論", "行動経済学"])
+    elif category_mid  == "確率・統計学":
+        datail_item = st.sidebar.selectbox("詳細項目",[
+            "確率過程",
+            "数理統計学"
+        ])
 
-else:
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["プログラミング・Web", "教育・学習", "キャリア・生活"])
-    if category_mid == "プログラミング・Web":
-        detail_item = st.sidebar.selectbox("詳細項目", ["Python", "Rust / C++", "Frontend (React)", "SQL"])
-    elif category_mid == "教育・学習":
-        detail_item = st.sidebar.selectbox("詳細項目", ["小学生向け勉強", "中学生向け勉強", "高校生向け勉強", "資格試験"])
+    elif category_mid  == "ミレニアム懸賞問題・未解決問題":
+        datail_item = st.sidebar.selectbox("詳細項目",[
+            "ヤン–ミルズ方程式と質量ギャップ問題",
+            "リーマン予想",
+            "P≠NP予想",
+            "ナビエ–ストークス方程式の解の存在と滑らかさ",
+            "ホッジ予想",
+            "BSD予想"
+            "素数ギャップ",
+            "コラッツ予想",
+            "ゴールドバッハ予想",
+            "双子素数予想",
+            "接吻数問題",
+    ])
+
+elif category_main == "物理":
+    category_mid = st.sidebar.selectbox("中カテゴリー", [
+        "古典力学", 
+        "電磁気学",
+        "相対性理論",
+        "量子力学", 
+        "熱力学・統計力学"
+    ])
+    
+    if category_mid == "古典力学":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+        "ニュートン力学",
+        "解析力学", 
+        "流体力学"
+    ])
+
+    elif category_mid == "相対性理論":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+        "特殊相対論",
+        "一般相対論"
+    ])
+
+    elif category_mid == "量子力学":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "波動力学", 
+            "量子統計力学", 
+            "場の量子論"
+    ])
+
     else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["生活の知恵", "キャリア設計", "健康管理"])
+        detail_item = "基本法則"
+
+elif category_main == "天文学":
+    category_mid = st.sidebar.selectbox("中カテゴリー", [
+        "天体力学", 
+        "恒星物理学",
+        "銀河天文学",
+        "宇宙論",
+        "観測天文学"
+    ])
+
+    if category_mid == "宇宙論 (Cosmology)":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "ビッグバン理論", 
+            "インフレーション理論", 
+            "ダークマター・ダークエネルギー"
+        ])
+
+    elif category_mid == "観測天文学":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "電波天文学", 
+            "X線・ガンマ線天文学", 
+            "重力波天文学"
+        ])
+    else:
+        detail_item = "宇宙の観測"
+
+elif category_main == "工学・技術":
+    category_mid = st.sidebar.selectbox("中カテゴリー", [
+        "機械工学", 
+        "電気電子工学", 
+        "通信工学", 
+        "土木・建築工学",
+        "材料工学", 
+        "航空宇宙工学"
+    ])
+    detail_item = "技術の実装"
+
+elif category_main == "プログラミング":
+    category_mid = st.sidebar.selectbox("中カテゴリー", [
+        "理論計算機科学", 
+        "ソフトウェア工学", 
+        "データサイエンス・AI", 
+        "ネットワークとセキュリティ", 
+        "HCI"
+    ])
+    
+    if category_mid == "理論計算機科学":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "アルゴリズムとデータ構造", 
+            "計算複雑性理論", 
+            "型理論"])
+
+    elif category_mid == "データサイエンス・AI":
+        detail_item = st.sidebar.selectbox("詳細項目", [
+            "機械学習", 
+            "自然論理処理", 
+            "コンピュータビジョン"
+        ])
+
+    else:
+        detail_item = "情報制御の技術"
 
 mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
 token_slider = st.sidebar.slider("会話の長さ", 1, 5, 3)
@@ -118,8 +224,6 @@ st.sidebar.progress(st.session_state.token_usage)
 st.sidebar.caption(f"残り容量: {st.session_state.token_usage}%")
 
 def call_groq(prompt, system_prompt=""):
-    if not GROQ_API_KEY:
-        return "コード内の GROQ_API_KEY が設定されていません。"
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
     temp = 0.1 + (expertise_slider * 0.15)
@@ -142,12 +246,12 @@ def call_groq(prompt, system_prompt=""):
         return str(e)
 
 def call_gemini(prompt, system_prompt=""):
-    if not GEMINI_API_KEY:
-        return "コード内の GEMINI_API_KEY が設定されていません。"
     model_name = "gemini-1.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_API_KEY}"
+    
     full_prompt = f"{system_prompt}\\n\\nUser: {prompt}"
     payload = {"contents": [{"parts": [{"text": full_prompt}]}]}
+    
     try:
         resp = requests.post(url, json=payload)
         if resp.status_code != 200:
