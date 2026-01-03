@@ -240,8 +240,12 @@ def call_groq(prompt, system_prompt=""):
 def call_gemini(prompt, system_prompt=""):
     if not GEMINI_API_KEY:
         return "GEMINI_API_KEYが設定されていません。"
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     
+    # モデル名を最新の安定版識別子に変更し、URL形式を修正
+    model_name = "gemini-1.5-flash-latest"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={GEMINI_API_KEY}"
+    
+    # stlite(JavaScript)のテンプレートリテラル内では \n は \\n と書く必要があります
     payload = {
         "contents": [
             {
@@ -270,9 +274,11 @@ def call_gemini(prompt, system_prompt=""):
             else:
                 break
         
+        # エラーメッセージを詳細に表示してデバッグしやすくする
         return f"エラーが発生しました (Status: {resp.status_code}): {resp.text}"
     except Exception as e:
         return f"リクエストに失敗しました: {str(e)}"
+        
 def search_arxiv(query):
     base_url = "http://export.arxiv.org/api/query?"
     params = f"search_query=all:{query}&start=0&max_results=3"
