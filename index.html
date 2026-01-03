@@ -238,16 +238,14 @@ def call_groq(prompt, system_prompt=""):
         return str(e)
 
 def call_gemini(prompt, system_prompt=""):
-    if not GEMINI_API_KEY:
-        return "GEMINI_API_KEYが設定されていません。"
     model_id = "gemini-1.5-flash"
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_id}:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1/models/{model_id}:generateContent?key={GEMINI_API_KEY}"
     
     payload = {
         "contents": [
             {
                 "parts": [
-                    {"text": f"System: {system_prompt}\\n\\nUser: {prompt}"}
+                    {"text": f"System: {system_prompt}\n\nUser: {prompt}"}
                 ]
             }
         ],
@@ -260,14 +258,15 @@ def call_gemini(prompt, system_prompt=""):
     headers = {"Content-Type": "application/json"}
     
     try:
-        for delay in [1, 2, 4, 8, 16]:
+        import time
+        for delay in [1, 2, 4, 8]:
             resp = requests.post(url, json=payload, headers=headers, timeout=30)
             if resp.status_code == 200:
                 res_json = resp.json()
                 if 'candidates' in res_json and res_json['candidates']:
                     return res_json['candidates'][0]['content']['parts'][0]['text']
                 return "Geminiから空のレスポンスが返されました。"
-            elif resp.status_code == 429:  # Rate Limit
+            elif resp.status_code == 429:
                 time.sleep(delay)
                 continue
             else:
