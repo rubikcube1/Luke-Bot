@@ -241,11 +241,13 @@ def call_gemini(prompt, system_prompt=""):
     model_id = "gemini-1.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1/models/{model_id}:generateContent?key={GEMINI_API_KEY}"
     
+    combined_text = f"System: {system_prompt}\n\nUser: {prompt}"
+    
     payload = {
         "contents": [
             {
                 "parts": [
-                    {"text": f"System: {system_prompt}\n\nUser: {prompt}"}
+                    {"text": combined_text}
                 ]
             }
         ],
