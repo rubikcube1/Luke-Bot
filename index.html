@@ -25,6 +25,11 @@ import json
 import time
 import xml.etree.ElementTree as ET
 import pandas as pd
+try:
+    import pyodide_http
+    pyodide_http.patch_all()
+except ImportError:
+    pass
 
 GROQ_API_KEY = "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"
 GEMINI_API_KEY = "AIzaSyAzLMt-JM1smoMD7kA1CC4GO3-rPCgHb8s"
