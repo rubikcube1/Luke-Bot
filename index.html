@@ -51,61 +51,64 @@ st.sidebar.title(APP_NAME)
 st.sidebar.subheader("API設定")
 user_gemini_key = st.sidebar.text_input("Gemini API Key を入力", type="password")
 
-st.sidebar.subheader("分野設定")
-category_main = st.sidebar.selectbox("大カテゴリー", ["数学", "物理", "天文学", "工学・技術", "プログラミング"])
+mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
 
+category_main = "未設定"
 category_mid = "未設定"
 detail_item = "未設定"
 
-if category_main == "数学":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["代数学", "幾何学", "解析学", "数理論理学・基礎論", "確率・統計学", "ミレニアム懸賞問題・未解決問題"])
-    if category_mid == "代数学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["群・環・体", "線形代数学", "数論", "代数幾何学", "表現論"])
-    elif category_mid == "幾何学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["微分幾何学", "位相幾何学", "シンプレクティック幾何学", "フラクタル幾何学"])
-    elif category_mid == "解析学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["実・複素解析", "微分方程式", "関数解析学", "変分法"])
-    elif category_mid == "数理論理学・基礎論":
-        detail_item = st.sidebar.selectbox("詳細項目", ["集合論", "圏論"])
-    elif category_mid == "確率・統計学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["確率過程", "数理統計学"])
-    elif category_mid == "ミレニアム懸賞問題・未解決問題":
-        detail_item = st.sidebar.selectbox("詳細項目", ["ヤン–ミルズ方程式と質量ギャップ問題", "リーマン予想", "P≠NP予想", "ナビエ–ストークス方程式の解の存在と滑らかさ", "ホッジ予想", "BSD予想", "素数ギャップ", "コラッツ予想", "ゴールドバッハ予想", "双子素数予想", "接吻数問題"])
+if mode not in ["一般会話", "コーダーモード"]:
+    st.sidebar.subheader("分野設定")
+    category_main = st.sidebar.selectbox("大カテゴリー", ["数学", "物理", "天文学", "工学・技術", "プログラミング"])
 
-elif category_main == "物理":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["古典力学", "電磁気学", "相対性理論", "量子力学", "熱力学・統計力学"])
-    if category_mid == "古典力学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["ニュートン力学", "解析力学", "流体力学"])
-    elif category_mid == "相対性理論":
-        detail_item = st.sidebar.selectbox("詳細項目", ["特殊相対論", "一般相対論"])
-    elif category_mid == "量子力学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["波動力学", "量子統計力学", "場の量子論"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["基本法則", "応用物理研究"])
+    if category_main == "数学":
+        category_mid = st.sidebar.selectbox("中カテゴリー", ["代数学", "幾何学", "解析学", "数理論理学・基礎論", "確率・統計学", "ミレニアム懸賞問題・未解決問題"])
+        if category_mid == "代数学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["群・環・体", "線形代数学", "数論", "代数幾何学", "表現論"])
+        elif category_mid == "幾何学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["微分幾何学", "位相幾何学", "シンプレクティック幾何学", "フラクタル幾何学"])
+        elif category_mid == "解析学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["実・複素解析", "微分方程式", "関数解析学", "変分法"])
+        elif category_mid == "数理論理学・基礎論":
+            detail_item = st.sidebar.selectbox("詳細項目", ["集合論", "圏論"])
+        elif category_mid == "確率・統計学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["確率過程", "数理統計学"])
+        elif category_mid == "ミレニアム懸賞問題・未解決問題":
+            detail_item = st.sidebar.selectbox("詳細項目", ["ヤン–ミルズ方程式と質量ギャップ問題", "リーマン予想", "P≠NP予想", "ナビエ–ストークス方程式の解の存在と滑らかさ", "ホッジ予想", "BSD予想", "素数ギャップ", "コラッツ予想", "ゴールドバッハ予想", "双子素数予想", "接吻数問題"])
 
-elif category_main == "天文学":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["天体力学", "恒星物理学", "銀河天文学", "宇宙論", "観測天文学"])
-    if category_mid == "宇宙論":
-        detail_item = st.sidebar.selectbox("詳細項目", ["ビッグバン理論", "インフレーション理論", "ダークマター・ダークエネルギー"])
-    elif category_mid == "観測天文学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["電波天文学", "X線・ガンマ線天文学", "重力波天文学"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["天体観測", "宇宙の構造"])
+    elif category_main == "物理":
+        category_mid = st.sidebar.selectbox("中カテゴリー", ["古典力学", "電磁気学", "相対性理論", "量子力学", "熱力学・統計力学"])
+        if category_mid == "古典力学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["ニュートン力学", "解析力学", "流体力学"])
+        elif category_mid == "相対性理論":
+            detail_item = st.sidebar.selectbox("詳細項目", ["特殊相対論", "一般相対論"])
+        elif category_mid == "量子力学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["波動力学", "量子統計力学", "場の量子論"])
+        else:
+            detail_item = st.sidebar.selectbox("詳細項目", ["基本法則", "応用物理研究"])
 
-elif category_main == "工学・技術":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["機械工学", "電気電子工学", "通信工学", "土木・建築工学", "材料工学", "航空宇宙工学"])
-    detail_item = st.sidebar.selectbox("詳細項目", ["技術の実装", "設計理論", "実用化"])
+    elif category_main == "天文学":
+        category_mid = st.sidebar.selectbox("中カテゴリー", ["天体力学", "恒星物理学", "銀河天文学", "宇宙論", "観測天文学"])
+        if category_mid == "宇宙論":
+            detail_item = st.sidebar.selectbox("詳細項目", ["ビッグバン理論", "インフレーション理論", "ダークマター・ダークエネルギー"])
+        elif category_mid == "観測天文学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["電波天文学", "X線・ガンマ線天文学", "重力波天文学"])
+        else:
+            detail_item = st.sidebar.selectbox("詳細項目", ["天体観測", "宇宙の構造"])
 
-elif category_main == "プログラミング":
-    category_mid = st.sidebar.selectbox("中カテゴリー", ["理論計算機科学", "ソフトウェア工学", "データサイエンス・AI", "ネットワークとセキュリティ", "HCI"])
-    if category_mid == "理論計算機科学":
-        detail_item = st.sidebar.selectbox("詳細項目", ["アルゴリズムとデータ構造", "計算複雑性理論", "型理論"])
-    elif category_mid == "データサイエンス・AI":
-        detail_item = st.sidebar.selectbox("詳細項目", ["機械学習", "自然言語処理", "コンピュータビジョン"])
-    else:
-        detail_item = st.sidebar.selectbox("詳細項目", ["システム構築", "セキュリティ対策"])
+    elif category_main == "工学・技術":
+        category_mid = st.sidebar.selectbox("中カテゴリー", ["機械工学", "電気電子工学", "通信工学", "土木・建築工学", "材料工学", "航空宇宙工学"])
+        detail_item = st.sidebar.selectbox("詳細項目", ["技術の実装", "設計理論", "実用化"])
 
-mode = st.sidebar.radio("対話モード", ["一般会話", "専門家対話", "論文検索・要約", "コーダーモード"])
+    elif category_main == "プログラミング":
+        category_mid = st.sidebar.selectbox("中カテゴリー", ["理論計算機科学", "ソフトウェア工学", "データサイエンス・AI", "ネットワークとセキュリティ", "HCI"])
+        if category_mid == "理論計算機科学":
+            detail_item = st.sidebar.selectbox("詳細項目", ["アルゴリズムとデータ構造", "計算複雑性理論", "型理論"])
+        elif category_mid == "データサイエンス・AI":
+            detail_item = st.sidebar.selectbox("詳細項目", ["機械学習", "自然言語処理", "コンピュータビジョン"])
+        else:
+            detail_item = st.sidebar.selectbox("詳細項目", ["システム構築", "セキュリティ対策"])
+
 token_slider = st.sidebar.slider("会話の長さ", 1, 5, 3)
 expertise_slider = st.sidebar.slider("専門性", 1, 5, 3)
 
@@ -179,7 +182,10 @@ def call_wolfram(query):
         return "WolframAlphaエラー"
 
 st.title(APP_NAME)
-display_context = f"{category_main} > {category_mid} > {detail_item} | {mode}"
+if mode in ["一般会話", "コーダーモード"]:
+    display_context = mode
+else:
+    display_context = f"{category_main} > {category_mid} > {detail_item} | {mode}"
 st.text(display_context)
 
 for message in st.session_state.messages:
